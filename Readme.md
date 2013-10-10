@@ -1,6 +1,6 @@
 # draggable
 
-  Make an element draggable with configurable behaviours.
+  Make an element draggable with configurable behaviours. Compatible with [component](https://github.com/component/component) package manager.
 
 ## Demo
 
@@ -33,6 +33,17 @@ An example of passing in options for pens:
 	});
 	
 Examples of all these behaviours can be seen in the [demo](http://jsfiddle.net/PvDLp/6/) or in the [example](https://github.com/jheytompkins/draggable/blob/master/example.html) page.
+
+## Use without component package manager
+
+ If you want to use draggable without the [component](https://github.com/component/component) package manager you can by simply adding [jheytompkins_draggable.js](https://github.com/jheytompkins/draggable/master/jheytompkins_draggable.js) to your script files and using in the following way:
+
+	 		var wheel = new jheytompkins_draggable(element, {
+	 			pens: false,
+	 			isAllowedOutOfPen: true,
+	 			contained: false
+	 		});
+
 
 ## Installation
 
