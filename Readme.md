@@ -1,6 +1,6 @@
 # draggable
 
-  Make a draggable component.
+  Make an element draggable with configurable behaviours.
 
 ## Demo
 
