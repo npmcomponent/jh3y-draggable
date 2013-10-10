@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>wheel</title>
+<title>draggable</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="build/build.css">
 	<script src="build/build.js"></script>
+	<style>
+		.pen {
+			border: thin solid black;
+			float: left;
+			margin: 30px;
+			height: 200px;
+			width: 100px;
+		}
+	</style>
 </head>
 <body>
 	<h4>draggable</h4>
@@ -12,6 +21,18 @@
 	<div class="myDraggable"></div>
 	<p>This is a HTML5 draggable div which uses the 'draggable' attribute. This will need to have a container implemented to be dragged into.</p>
 	<div class="myhtml5Draggable"></div>
+	<p>This is a contained draggable </p>
+	<div class="container">
+		<div class="myContainedDrag"></div>
+	</div>
+	<p>We also have the concept of pens which are elements that other draggables can be dropped into and taken out of.</p>
+	<div class="pens">
+		<div class="pen"></div>
+		<div class="pen"></div>
+		<div class="pen"></div>
+		<div class="pen"></div>
+	</div>
+	<div class="pennedDrag"></div>
 	<script>
 		var draggable = require('draggable');
 		var element = document.querySelector('.myDraggable');
@@ -23,7 +44,27 @@
 		elementhtml5.style.height = '50px';
 		elementhtml5.style.width = '50px';
 		elementhtml5.style.background = 'yellow';
-		var myhtml5Drag = new draggable(elementhtml5, true);
+		var myhtml5Drag = new draggable(elementhtml5, {
+			html5draggable: true
+		});
+		var container = document.querySelector('.container');
+		container.style.height = '200px';
+		container.style.width = '200px';
+		container.style.border = 'thin solid black';
+		var elementContained = document.querySelector('.myContainedDrag');
+		elementContained.style.height = '50px';
+		elementContained.style.width = '50px';
+		elementContained.style.background = 'green';
+		var myContainedDrag = new draggable (elementContained, {
+			contained: true
+		});
+		// you can add to the events that are currently in which means we could add to the event when snapping in whiteboard because  what if we drop outside a column.
+		var elementPenned = document.querySelector('.pennedDrag');
+		elementPenned.style.height = '50px';
+		elementPenned.style.width = '50px';
+		elementPenned.style.background = 'blue';
+
+		var myPennedDrag = new draggable (elementPenned);
 	</script>
 </body>
 </html>
