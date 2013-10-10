@@ -36,7 +36,7 @@ Examples of all these behaviours can be seen in the [demo](http://jsfiddle.net/P
 
 ## Use without component package manager
 
- If you want to use draggable without the [component](https://github.com/component/component) package manager you can by simply adding [jheytompkins_draggable.js](https://github.com/jheytompkins/draggable/blob/master/jheytompkins_draggable.js) to your script files and using in the following way:
+ If you want to use draggable without the [component](https://github.com/component/component) package manager you can by simply adding [jheytompkins_draggable.js](https://github.com/jheytompkins/draggable/blob/master/jheytompkins-draggable.js) to your script files and using in the following way:
 
 	 		var draggable = new jheytompkins_draggable(element, {
 	 			pens: false,
