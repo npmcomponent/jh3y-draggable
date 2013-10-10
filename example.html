@@ -9,7 +9,7 @@
 		.pen {
 			border: thin solid black;
 			float: left;
-			margin: 30px;
+			margin: 70px;
 			height: 200px;
 			width: 100px;
 		}
@@ -26,8 +26,11 @@
 		<div class="myContainedDrag"></div>
 	</div>
 	<p>We also have the concept of pens which are elements that other draggables can be dropped into and taken out of.</p>
+	<p>The blue one can be dragged anywhere but will snap to its pens. The purple one is restricted to being within one of its declared pens. Try it and see.</p>
 	<div class="pens">
-		<div class="pen"></div>
+		<div class="pen">
+			<div class="restrictedPennedDrag"></div>
+		</div>
 		<div class="pen"></div>
 		<div class="pen"></div>
 		<div class="pen"></div>
@@ -64,7 +67,19 @@
 		elementPenned.style.width = '50px';
 		elementPenned.style.background = 'blue';
 
-		var myPennedDrag = new draggable (elementPenned);
+		var myPennedDrag = new draggable (elementPenned, {
+			pens: document.querySelectorAll('.pen')
+		});
+
+		var elementRestrictedPenned = document.querySelector('.restrictedPennedDrag');
+		elementRestrictedPenned.style.height = '50px';
+		elementRestrictedPenned.style.width = '50px';
+		elementRestrictedPenned.style.background = 'purple';
+
+		var myRestrictedPennedDrag = new draggable (elementRestrictedPenned, {
+			pens: document.querySelectorAll('.pen'),
+			allowedOutOfPen: false
+		});
 	</script>
 </body>
 </html>

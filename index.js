@@ -18,38 +18,53 @@ function draggable(element, options) {
 	}
 	this.options = extend(this.defaults, options);
 	this.parent = (this.options.contained) ? this.element.parentNode: window;
+	this.allowedOutOfPen = (this.options.allowedOutOfPen  !== undefined) ? this.options.allowedOutOfPen : true;
+	this.pens = this.options.pens;
 	this._create();
 }
 draggable.prototype._create = function () {
 	var draggable = this;
 	var move = function (event) {
 		draggable.element.style.position = 'absolute';
-		var newY = event.clientY - draggable.offY;
-		var newX = event.clientX - draggable.offX;
+		draggable.newY = event.clientY - draggable.offY;
+		draggable.newX = event.clientX - draggable.offX;
 		if (draggable.options.contained) {
-			if (newX < draggable.boundsXL) {
-				newX = draggable.boundsXL;
+			if (draggable.newX < draggable.boundsXL) {
+				draggable.newX = draggable.boundsXL;
 			}
-			if (newX > draggable.boundsXR) {
-				newX = draggable.boundsXR;
+			if (draggable.newX > draggable.boundsXR) {
+				draggable.newX = draggable.boundsXR;
 			}
-			if (newY > draggable.boundsXB) {
-				newY = draggable.boundsXB;
+			if (draggable.newY > draggable.boundsXB) {
+				draggable.newY = draggable.boundsXB;
 			}
-			if (newY < draggable.boundsXT) {
-				newY = draggable.boundsXT;
+			if (draggable.newY < draggable.boundsXT) {
+				draggable.newY = draggable.boundsXT;
 			}
 		}
-		draggable.element.style.left = newX + 'px';
-		draggable.element.style.top = newY + 'px';
+		draggable.element.style.left = draggable.newX + 'px';
+		draggable.element.style.top = draggable.newY + 'px';
 	};	
 	var mouseUp = function () {
 		draggable.parent.removeEventListener('mousemove', move, true);
-		//snap to bind goes in here. if any of the following elements are being hovered over to append to this for now.
-		// this could be a set of classes or a specific element that can be dropped into or the likes.
 		if (draggable.pens && draggable.pens.length > 0) {
-			//have to check whether the draggable is in there.
-			console.log('ets snap to something then.');
+			var penned = false,
+				currentPen = draggable.element.parentNode;
+			[].forEach.call(draggable.pens, function (pen) {
+				if (draggable.newX < (pen.offsetLeft + pen.offsetWidth) && draggable.newX > (pen.offsetLeft - draggable.element.offsetWidth) && draggable.newY > (pen.offsetTop - draggable.element.offsetHeight) && draggable.newY < (pen.offsetTop + pen.offsetHeight + draggable.element.offsetHeight)) {
+					penned = true;
+					draggable.element.style.position = '';
+					pen.appendChild(draggable.element);
+				} 
+			});
+			if (!penned) {
+				if (draggable.allowedOutOfPen) {
+					document.querySelector('body').appendChild(draggable.element);
+				} else {
+					currentPen.appendChild(draggable.element);
+					draggable.element.style.position = '';
+				}
+			}
 		}
 	};
 	var mouseDown = function (event) {
