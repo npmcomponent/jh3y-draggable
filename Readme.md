@@ -38,7 +38,7 @@ Examples of all these behaviours can be seen in the [demo](http://jsfiddle.net/P
 
  If you want to use draggable without the [component](https://github.com/component/component) package manager you can by simply adding [jheytompkins_draggable.js](https://github.com/jheytompkins/draggable/master/jheytompkins_draggable.js) to your script files and using in the following way:
 
-	 		var wheel = new jheytompkins_draggable(element, {
+	 		var draggable = new jheytompkins_draggable(element, {
 	 			pens: false,
 	 			isAllowedOutOfPen: true,
 	 			contained: false
