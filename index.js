@@ -1,8 +1,9 @@
 module.exports = draggable;
 
-function draggable(element) {
+function draggable(element, html5draggable) {
 	if (!(this instanceof draggable)) return new draggable(element);
 	this.element = element;
+	this.html5draggable = (html5draggable === undefined) ? false : html5draggable;
 	this._create();
 }
 draggable.prototype._create = function () {
@@ -20,6 +21,15 @@ draggable.prototype._create = function () {
 		draggable.offX = event.clientX - parseInt(draggable.element.offsetLeft);
 		window.addEventListener('mousemove', move, true);
 	};
-	draggable.element.addEventListener('mousedown', mouseDown, false);
-    	window.addEventListener('mouseup', mouseUp, false);
+	var dragStart = function (event) {
+		event.dataTransfer.effectAllowed = 'move';
+		event.dataTransfer.setData("text/html", draggable.element);
+	};
+	if (draggable.html5draggable) {
+		draggable.element.setAttribute('draggable', 'true');
+		draggable.element.addEventListener('dragstart', dragStart, false);
+	} else {
+		draggable.element.addEventListener('mousedown', mouseDown, false);
+	    	window.addEventListener('mouseup', mouseUp, false);
+	}
 }
