@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>wheel</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="build/build.css">
+	<script src="build/build.js"></script>
+</head>
+<body>
+	<h4>draggable</h4>
+	<p>Here is an example draggable div.</p>
+	<div class="myDraggable"></div>
+	<script>
+		var draggable = require('draggable');
+		var element = document.querySelector('.myDraggable');
+		element.style.height = '50px';
+		element.style.width = '50px';
+		element.style.background = 'red';
+		var myDrag = new draggable(element);
+	</script>
+</body>
+</html>
