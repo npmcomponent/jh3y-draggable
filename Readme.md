@@ -4,7 +4,7 @@
 
 ## Demo
 
- A simple demo of making a draggable div can be seen [here](http://jsfiddle.net/PvDLp/6/).
+ A simple demo of making a draggable div can be seen [here](http://jsfiddle.net/PvDLp/8/).
 
 ## API
 
@@ -22,15 +22,32 @@ Example:
 	
 There are also options you can pass in to configure the draggables behaviour. These are as follows:
 
-	pens: NodeList/array of elements - These define element that a draggable will snap into.
-	allowedOutOfPen: true/false - This defines whether a draggable can be dragged out of pens or whether it must always be contained within one of its defined pens.
-	contained: true/false - This defines whether a draggable can be dragged outside of its parent or not.
+	pens: NodeList/array of elements - Define elements that a draggable will snap into.
+	roam: true/false [default: true] - Defines whether a draggable can be dragged out of pens or whether it must always be contained within one of its defined pens.
+	contained: true/false [default: false] - Defines whether a draggable can be dragged outside of its parent or not.
+	vertical: true/false [default: true] - Defines whether a draggable can be dragged vertically.
+	horizontal: true/false [default: true] - Defines whether a draggable can be dragged horizontally.
+	ghosting: true/false [default: false] - Define whether draggable has ghosting effect (see demo).
 	
 An example of passing in options for pens: 
 
 	var myPennedDrag = new draggable(element, {
 		pens: document.querySelector('.pen')
 	});
+
+There are also some methods you can use on your draggable:
+
+	setPens(bool): set pen elements for draggable to snap to.
+	setContained(bool): set whether a draggable is contained.
+	setRoam(bool): set whether a draggable can roam outside of pens.
+	setVertical(bool): set whether a draggable can be dragged vertically.
+	setHorizontal(bool): set whether a draggable can be dragged horizontally.
+	setGhosting(bool): set whether a draggable has the ghosting effect.
+
+Example:
+
+	var myDrag = new draggable(element);
+	myDrag.setGhosting(true);
 	
 Examples of all these behaviours can be seen in the [demo](http://jsfiddle.net/PvDLp/6/) or in the [example](https://github.com/jheytompkins/draggable/blob/master/example.html) page.
 

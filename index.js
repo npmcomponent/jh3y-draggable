@@ -22,9 +22,9 @@ function draggable(element, options) {
 	this._roam = (this._options.roam  !== undefined) ? this._options.roam : true;
 	this._contained = (this._options.contained !== undefined) ? this._options.contained : false;
 	this._pens = this._options.pens;
-	this._vertical = (this._options.vertical) ? this._options.vertical : true;
-	this._horizontal = (this._options.horizontal) ? this._options.horizontal : true;
-	this._ghosting = (this._options.ghosting) ? this._options.ghosting : false;
+	this._vertical = (this._options.vertical !== undefined) ? this._options.vertical : true;
+	this._horizontal = (this._options.horizontal !== undefined) ? this._options.horizontal : true;
+	this._ghosting = (this._options.ghosting !== undefined) ? this._options.ghosting : false;
 	this._create();
 }
 draggable.prototype.setPens = function (pens) {
@@ -50,6 +50,11 @@ draggable.prototype.setVertical = function (vertical) {
 draggable.prototype.setHorizontal = function (horizontal) {
 	if (horizontal !== undefined) {
 		this._horizontal = horizontal;
+	}
+}
+draggable.prototype.setGhosting = function (ghosting) {
+	if (ghosting !== undefined) {
+		this._ghosting = ghosting;
 	}
 }
 draggable.prototype._create = function () {
@@ -85,7 +90,9 @@ draggable.prototype._create = function () {
 			}
 		},
 		endDrag = function () {
-			ghost.remove();
+			if (ghost !== undefined) {
+				ghost.remove();
+			}
 			draggable._parent.removeEventListener('mousemove', drag, true);
 			if (draggable._pens && draggable._pens.length > 0) {
 				var penned = false,
