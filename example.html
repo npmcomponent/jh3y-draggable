@@ -13,59 +13,78 @@
 			height: 200px;
 			width: 100px;
 		}
+		.drag {
+			height: 50px;
+			width: 50px;
+		}
+		.container {
+			border: thin solid black;
+			height: 200px;
+			width: 200px;
+		}
 	</style>
 </head>
 <body>
 		<h4>draggable</h4>
 		<p>Here is an example draggable div that will simply move anywhere you want it to in the window.</p>
-		<div class="myDraggable"></div>
+		<div class="myDraggable drag"></div>
+		<p>You can also restrict how a draggable can be dragged to vertically, horizontally or both.</p>
+		<div class="hDrag drag"></div><div class="vDrag drag"></div>
 		<p>This is a contained draggable </p>
 		<div class="container">
-			<div class="myContainedDrag"></div>
+			<div class="myContainedDrag drag"></div>
 		</div>
+		<p>You can also add a ghosting effect to your draggable</p>
+		<div class="drag ghostDrag"></div>
 		<p>We also have the concept of pens which are elements that other draggables can be dropped into and taken out of.</p>
 		<p>The blue one can be dragged anywhere but will snap to its pens. The purple one is restricted to being within one of its declared pens. Try it and see.</p>
 		<div class="pens">
 			<div class="pen">
-				<div class="restrictedPennedDrag"></div>
+				<div class="restrictedPennedDrag drag"></div>
 			</div>
 			<div class="pen"></div>
 			<div class="pen"></div>
 			<div class="pen"></div>
 		</div>
-		<div class="pennedDrag"></div>
+		<div class="pennedDrag drag"></div>
 	<script>
 		var draggable = require('draggable');
 		var element = document.querySelector('.myDraggable');
-		element.style.height = '50px';
-		element.style.width = '50px';
 		element.style.background = 'red';
 		var myDrag = new draggable(element);
 		var container = document.querySelector('.container');
-		container.style.height = '200px';
-		container.style.width = '200px';
-		container.style.border = 'thin solid black';
 		var elementContained = document.querySelector('.myContainedDrag');
-		elementContained.style.height = '50px';
-		elementContained.style.width = '50px';
 		elementContained.style.background = 'green';
 		var myContainedDrag = new draggable (elementContained, {
 			contained: true
 		});
 		var elementPenned = document.querySelector('.pennedDrag');
-		elementPenned.style.height = '50px';
-		elementPenned.style.width = '50px';
 		elementPenned.style.background = 'blue';
 		var myPennedDrag = new draggable (elementPenned, {
 			pens: document.querySelectorAll('.pen')
 		});
 		var elementRestrictedPenned = document.querySelector('.restrictedPennedDrag');
-		elementRestrictedPenned.style.height = '50px';
-		elementRestrictedPenned.style.width = '50px';
 		elementRestrictedPenned.style.background = 'yellow';
 		var myRestrictedPennedDrag = new draggable (elementRestrictedPenned, {
 			pens: document.querySelectorAll('.pen'),
-			allowedOutOfPen: false
+			roam: false
+		});
+		var elementHDrag = document.querySelector('.hDrag');
+		elementHDrag.style.background = 'purple';
+		var myHorizontalDrag = new draggable (elementHDrag, {
+			horizontal: true,
+			vertical: false
+		});
+		var elementVDrag = document.querySelector('.vDrag');
+		elementVDrag.style.background = 'cyan';
+		var myVerticalDrag = new draggable (elementVDrag , {
+			vertical: true,
+			horizontal: false
+		});
+		var elementGhostDrag = document.querySelector('.ghostDrag');
+		elementGhostDrag.style.background = 'magenta';
+		var myGhostDrag = new draggable (elementGhostDrag, {
+			ghosting: true
 		});
 	</script>
 </body>

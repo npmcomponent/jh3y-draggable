@@ -3,9 +3,11 @@ module.exports = draggable;
 function draggable(element, options) {
 	if (!(this instanceof draggable)) return new draggable(element);
 	this.element = element;
-	this.defaults = {
+	this._defaults = {
 		contained: false,
-		pens: false
+		pens: false,
+		vertical: true,
+		horizontal: true
 	};
 	var extend = function (a, b) {
 		for(var key in b) {
@@ -15,71 +17,123 @@ function draggable(element, options) {
 		}
 		return a;
 	}
-	this.options = extend(this.defaults, options);
-	this.parent = (this.options.contained) ? this.element.parentNode: window;
-	this.allowedOutOfPen = (this.options.allowedOutOfPen  !== undefined) ? this.options.allowedOutOfPen : true;
-	this.pens = this.options.pens;
+	this._options = extend(this._defaults, options);
+	this._parent = (this._options.contained) ? this.element.parentNode: window;
+	this._roam = (this._options.roam  !== undefined) ? this._options.roam : true;
+	this._contained = (this._options.contained !== undefined) ? this._options.contained : false;
+	this._pens = this._options.pens;
+	this._vertical = (this._options.vertical) ? this._options.vertical : true;
+	this._horizontal = (this._options.horizontal) ? this._options.horizontal : true;
+	this._ghosting = (this._options.ghosting) ? this._options.ghosting : false;
 	this._create();
 }
+draggable.prototype.setPens = function (pens) {
+	if (pens) {
+		this._pens = pens;
+	}
+}
+draggable.prototype.setContained = function (contained) {
+	if (contained !== undefined) {
+		this._contained = contained;
+	}
+}
+draggable.prototype.setRoam = function (roam) {
+	if (roam !== undefined) {
+		this._roam = roam;
+	}
+}
+draggable.prototype.setVertical = function (vertical) {
+	if (vertical !== undefined) {
+		this._vertical = vertical;
+	}
+}
+draggable.prototype.setHorizontal = function (horizontal) {
+	if (horizontal !== undefined) {
+		this._horizontal = horizontal;
+	}
+}
 draggable.prototype._create = function () {
-	var draggable = this;
-	var move = function (event) {
-		draggable.element.style.position = 'absolute';
-		draggable.newY = event.clientY - draggable.offY;
-		draggable.newX = event.clientX - draggable.offX;
-		if (draggable.options.contained) {
-			if (draggable.newX < draggable.boundsXL) {
-				draggable.newX = draggable.boundsXL;
-			}
-			if (draggable.newX > draggable.boundsXR) {
-				draggable.newX = draggable.boundsXR;
-			}
-			if (draggable.newY > draggable.boundsXB) {
-				draggable.newY = draggable.boundsXB;
-			}
-			if (draggable.newY < draggable.boundsXT) {
-				draggable.newY = draggable.boundsXT;
-			}
-		}
-		draggable.element.style.left = draggable.newX + 'px';
-		draggable.element.style.top = draggable.newY + 'px';
-	};	
-	var mouseUp = function () {
-		draggable.parent.removeEventListener('mousemove', move, true);
-		if (draggable.pens && draggable.pens.length > 0) {
-			var penned = false,
-				currentPen = draggable.element.parentNode;
-			[].forEach.call(draggable.pens, function (pen) {
-				if (draggable.newX < (pen.offsetLeft + pen.offsetWidth) && draggable.newX > (pen.offsetLeft - draggable.element.offsetWidth) && draggable.newY > (pen.offsetTop - draggable.element.offsetHeight) && draggable.newY < (pen.offsetTop + pen.offsetHeight + draggable.element.offsetHeight)) {
-					penned = true;
-					draggable.element.style.position = '';
-					pen.appendChild(draggable.element);
-				} 
-			});
-			if (!penned) {
-				if (draggable.allowedOutOfPen) {
-					document.querySelector('body').appendChild(draggable.element);
-				} else {
-					currentPen.appendChild(draggable.element);
-					draggable.element.style.position = '';
+	var draggable = this,
+		ghost,
+		drag = function (event) {
+			//TODO: really cool that on move here you could almost make online paint, didn't even think of that.
+			// ghost = draggable.element.cloneNode();
+			// ghost.style.opacity = 0.5;
+			// document.querySelector('body').appendChild(ghost);
+			draggable.element.style.position = 'absolute';
+			draggable._newY = event.clientY - draggable._offY;
+			draggable._newX = event.clientX - draggable._offX;
+			if (draggable._contained) {	
+				if (draggable._newX < draggable._boundsXL) {
+					draggable._newX = draggable._boundsXL;
+				}
+				if (draggable._newX > draggable._boundsXR) {
+					draggable._newX = draggable._boundsXR;
+				}
+				if (draggable._newY > draggable._boundsXB) {
+					draggable._newY = draggable._boundsXB;
+				}
+				if (draggable._newY < draggable._boundsXT) {
+					draggable._newY = draggable._boundsXT;
 				}
 			}
-		}
-	};
-	var mouseDown = function (event) {
-		draggable.offY = event.clientY - parseInt(draggable.element.offsetTop);
-		draggable.offX = event.clientX - parseInt(draggable.element.offsetLeft);
-		draggable.boundsXR = (draggable.parent.offsetLeft + draggable.parent.offsetWidth) - draggable.element.offsetWidth;
-		draggable.boundsXL = draggable.parent.offsetLeft;
-		draggable.boundsXT = draggable.parent.offsetTop;
-		draggable.boundsXB = (draggable.parent.offsetTop + draggable.parent.offsetHeight) - draggable.element.offsetHeight;
-		draggable.parent.addEventListener('mousemove', move, true);
-	};
-	var dragStart = function (event) {
-		event.dataTransfer.effectAllowed = 'move';
-		event.dataTransfer.setData("text/html", draggable.element);
-	};
-	draggable.element.addEventListener('mousedown', mouseDown, false);
-	draggable.element.addEventListener('touchstart', mouseDown, false);
-    	draggable.element.addEventListener('mouseup', mouseUp, false);
+			if (draggable._horizontal) {
+				draggable.element.style.left = draggable._newX + 'px';
+			}
+			if (draggable._vertical) {
+				draggable.element.style.top = draggable._newY + 'px';
+			}
+		},
+		endDrag = function () {
+			ghost.remove();
+			draggable._parent.removeEventListener('mousemove', drag, true);
+			if (draggable._pens && draggable._pens.length > 0) {
+				var penned = false,
+					currentPen = draggable.element.parentNode,
+					isAPen = function (element) {
+						for (var i = 0; i <= draggable._pens.length - 1; i++) {
+							if (currentPen === draggable._pens[i]) {
+								return true;
+							}
+						};
+					};
+				for (var i = 0; i < draggable._pens.length - 1; i++) {
+					if (draggable._newX < (draggable._pens[i].offsetLeft + draggable._pens[i].offsetWidth) && draggable._newX > (draggable._pens[i].offsetLeft - draggable.element.offsetWidth) && draggable._newY > (draggable._pens[i].offsetTop - draggable.element.offsetHeight) && draggable._newY < (draggable._pens[i].offsetTop + draggable._pens[i].offsetHeight + draggable.element.offsetHeight)) {
+						penned = true;
+						draggable.element.style.position = '';
+						draggable._pens[i].appendChild(draggable.element);
+						break;
+					}
+				};
+				if (!penned) {
+					if (draggable._roam) {
+						document.querySelector('body').appendChild(draggable.element);
+					} else {
+						if (isAPen(currentPen)) {
+							currentPen.appendChild(draggable.element);
+							draggable.element.style.position = '';
+						}
+					}
+				}
+			}
+		},
+		startDrag = function (event) {
+			draggable._offY = event.clientY - parseInt(draggable.element.offsetTop);
+			draggable._offX = event.clientX - parseInt(draggable.element.offsetLeft);
+			draggable._boundsXR = (draggable._parent.offsetLeft + draggable._parent.offsetWidth) - draggable.element.offsetWidth;
+			draggable._boundsXL = draggable._parent.offsetLeft;
+			draggable._boundsXT = draggable._parent.offsetTop;
+			draggable._boundsXB = (draggable._parent.offsetTop + draggable._parent.offsetHeight) - draggable.element.offsetHeight;
+			if (draggable._ghosting) {
+				ghost = draggable.element.cloneNode();
+				draggable.element.parentNode.appendChild(ghost);
+				ghost.style.opacity = 0.2;
+				ghost.style.position = 'absolute';
+				ghost.style.left = draggable.element.offsetLeft + 'px';
+				ghost.style.top = draggable.element.offsetTop + 'px';
+			}	
+			draggable._parent.addEventListener('mousemove', drag, true);
+		};
+	draggable.element.addEventListener('mousedown', startDrag, false);
+    	draggable.element.addEventListener('mouseup', endDrag, false);
 }
