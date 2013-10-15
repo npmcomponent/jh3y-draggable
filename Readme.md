@@ -37,7 +37,7 @@ An example of passing in options for pens:
 
 There are also some methods you can use on your draggable:
 
-	setPens(bool): set pen elements for draggable to snap to.
+	setPens(NodeList - array of elements): set pen elements for draggable to snap to.
 	setContained(bool): set whether a draggable is contained.
 	setRoam(bool): set whether a draggable can roam outside of pens.
 	setVertical(bool): set whether a draggable can be dragged vertically.
