@@ -49,13 +49,13 @@ Example:
 	var myDrag = new draggable(element);
 	myDrag.setGhosting(true);
 	
-Examples of all these behaviours can be seen in the [demo](http://jsfiddle.net/PvDLp/6/) or in the [example](https://github.com/jheytompkins/draggable/blob/master/example.html) page.
+Examples of all these behaviours can be seen in the [demo](http://jsfiddle.net/PvDLp/6/) or in the [example](https://github.com/jh3y/draggable/blob/master/example.html) page.
 
 ## Use without component package manager
 
- If you want to use draggable without the [component](https://github.com/component/component) package manager you can by simply adding [jheytompkins_draggable.js](https://github.com/jheytompkins/draggable/blob/master/jheytompkins-draggable.js) to your script files and using in the following way:
+ If you want to use draggable without the [component](https://github.com/component/component) package manager you can by simply adding [jh3y_draggable.js](https://github.com/jh3y/draggable/blob/master/jh3y-draggable.js) to your script files and using in the following way:
 
-	 		var draggable = new jheytompkins_draggable(element, {
+	 		var draggable = new jh3y_draggable(element, {
 	 			pens: false,
 	 			isAllowedOutOfPen: true,
 	 			contained: false
@@ -66,7 +66,7 @@ Examples of all these behaviours can be seen in the [demo](http://jsfiddle.net/P
 
   Install with [component(1)](http://component.io):
 
-    $ component install jheytompkins/draggable
+    $ component install jh3y/draggable
 
 ## License
 

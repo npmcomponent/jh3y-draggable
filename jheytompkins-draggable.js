@@ -354,5 +354,5 @@ require.alias("draggable/index.js", "draggable/index.js");if (typeof exports == 
 } else if (typeof define == "function" && define.amd) {
   define(function(){ return require("draggable"); });
 } else {
-  this["jheytompkins-draggable"] = require("draggable");
+  this["jh3y-draggable"] = require("draggable");
 }})();
