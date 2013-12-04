@@ -16,7 +16,7 @@ Install with [component(1)](http://component.io):
 
 	$ component install jh3y/draggable
 
-###$use
+###use
 simply create an element and then make it a draggable
 
 	var draggable = require('draggable');//ONLY REQUIRED IF USING COMPONENT PACKAGE MANAGER
