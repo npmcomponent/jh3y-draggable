@@ -88,6 +88,7 @@ draggable.prototype._create = function () {
 			if (draggable._vertical) {
 				draggable.element.style.top = draggable._newY + 'px';
 			}
+			draggable._parent.addEventListener('dblclick', endDrag);
 		},
 		endDrag = function () {
 			if (ghost !== undefined) {
