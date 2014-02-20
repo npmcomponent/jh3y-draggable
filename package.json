@@ -1,0 +1,10 @@
+{
+  "name": "jh3y-draggable",
+  "description": "Make a draggable component.",
+  "version": "0.0.1",
+  "keywords": [],
+  "main": "index.js",
+  "styles": [],
+  "dependencies": {},
+  "license": "MIT"
+}
